@@ -1,0 +1,61 @@
+var msgsEle = document.querySelector('#stream')
+function getHeight(ele) {
+  return parseFloat(getComputedStyle(ele).getPropertyValue('height'))
+}
+function addMsgEle(msg) {
+  const msgEle = document.createElement('div')
+  msgEle.innerHTML = msg
+  msgsEle.insertBefore(msgEle, msgsEle.firstChild)
+  let height = getHeight(msgEle)
+  msgEle.style.height = '10px'
+  msgEle.style.overflow = 'hidden'
+  let increaseHeight = setInterval(function() {
+    msgEle.style.height = getHeight(msgEle) + 1 + 'px'
+    if(getHeight(msgEle) >= height + 33) { // 33 is for marge/padd?
+      clearInterval(increaseHeight)
+    }
+  });
+}
+
+function loadJson(path, callback) {   
+
+  var xobj = new XMLHttpRequest();
+  xobj.overrideMimeType("application/json");
+  xobj.open('GET', path, true);
+  xobj.onreadystatechange = function () {
+    if (xobj.readyState == 4 && xobj.status == "200") {
+      callback(xobj.responseText);
+    }
+  };
+  xobj.send(null);  
+}
+
+
+function doAfterJsonLoaded(responseText) {
+  let shownMsgsAmount = 0
+  let msgs = responseText
+  msgs = JSON.parse(msgs)
+  if(msgs.length < 1) {
+    addMsgEle('No messages found, try a reload after a few seconds.')
+    return
+  }
+  addMsgEle(msgs.shift())
+  const streamLoop = setInterval(function() {
+    addMsgEle(msgs.shift())
+    if(msgs.length < 2) {
+      clearInterval(streamLoop)
+      setTimeout(function() {
+       loadJson('msgs', doAfterJsonLoaded)
+      }, 5000)
+      return
+    }
+
+    shownMsgsAmount += 1
+    if(shownMsgsAmount > 2) {
+//      msgsEle.children[msgsEle.children.length-1].remove()  
+    }
+  }, 3000);
+}
+
+
+loadJson('msgs', doAfterJsonLoaded)
