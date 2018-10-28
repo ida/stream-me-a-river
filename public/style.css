@@ -9,16 +9,16 @@ body {
     margin: 2.7em 10%;
   }
 
-  .post {
-    padding: 0 0.75em;
-    border: 1px solid #555;
-    border-radius: 3px;
-  }
-    .meta {
-      text-align: right;
-      font-size: 80%;
-      color: #555;
+    .post {
+      padding: 0 0.75em;
+      border: 1px solid #555;
+      border-radius: 3px;
     }
+      .meta {
+        text-align: right;
+        font-size: 80%;
+        color: #555;
+      }
 
   footer {
     font-size: 80%;

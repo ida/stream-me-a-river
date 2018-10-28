@@ -48,6 +48,7 @@ copied. Also, you should not share your tokens with others.
 Why
 ---
 
+The following  numbers correlate with the ones of section 'What' above.
 
 1. One open browser-tab is better than several open browser tabs.
 

@@ -51,7 +51,7 @@ function doAfterJsonLoaded(responseText) {
       return
     }
     addMsgEle(msgs.shift())
-  }, 3000);
+  }, 5000);
 }
 
 
