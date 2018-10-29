@@ -9,7 +9,7 @@ What
 ----
 
 
-1. Show public local streams of several mastodon-instances.
+1. Show streams of several mastodon-instances in one stream.
 
 2. Prepend one post after another in the stream-view
    with a pause of same duration between the posts,
@@ -42,6 +42,11 @@ and development, see section 'development' below.
 The file './.env.example' shows the expected format.
 It is a special file, that stays hidden from others aand is not
 copied. Also, you should not share your tokens with others.
+
+
+4. By default the local tmelines are displayed,, you can change that to your
+home-timelines e.g., see the file './streams.js' for possibilities and changing
+the stream-type.
 
 
 

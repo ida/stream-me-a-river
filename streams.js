@@ -33,7 +33,7 @@ function invokeStream(apiConnection, streamName) {
 }
 
 
-function invokeStreams(streamName='public') {
+function invokeStreams(streamName='user') {
   // streamName = 'public'       // Federation timeline
   // streamName = 'public/local' // Instance timeline
   // streamName = 'user'         // Home timeline
