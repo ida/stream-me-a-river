@@ -45,8 +45,8 @@ copied. Also, you should not share your tokens with others.
 
 
 4. By default the local tmelines are displayed,, you can change that to your
-home-timelines e.g., see the file './streams.js' for possibilities and changing
-the stream-type.
+home-timelines e.g., see the function `invokeStreams` in the file './streams.js' for possibile streams and changing the stream-type.
+
 
 
 
