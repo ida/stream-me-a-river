@@ -1,4 +1,3 @@
-
 const Streams = require('./streams.js');
 const river = new Streams();
 
@@ -10,6 +9,10 @@ app.use(express.static('public'))
 
 app.get("/", (request, response) => {
   response.sendFile(__dirname + '/views/index.html')
+});
+
+app.get("/controls", (request, response) => {
+  response.sendFile(__dirname + '/views/controls.html')
 });
 
 app.get("/msgs", (request, response) => {

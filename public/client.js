@@ -1,7 +1,12 @@
-var msgsEle = document.querySelector('#stream')
+let msgs = []
+let streamLoop = null
+const msgsEle = document.querySelector('#stream')
+const pauseEle = document.querySelector('#stop-or-start')
+
 function getHeight(ele) {
   return parseFloat(getComputedStyle(ele).getPropertyValue('height'))
 }
+
 function addMsgEle(msg) {
   const msgEle = document.createElement('div')
   msgEle.innerHTML = msg
@@ -17,32 +22,38 @@ function addMsgEle(msg) {
   });
 }
 
-function loadJson(path, callback) {   
-
-  var xobj = new XMLHttpRequest();
-  xobj.overrideMimeType("application/json");
-  xobj.open('GET', path, true);
-  xobj.onreadystatechange = function () {
-    if (xobj.readyState == 4 && xobj.status == "200") {
-      callback(xobj.responseText);
-    }
-  };
-  xobj.send(null);  
-}
-
-
 function doAfterJsonLoaded(responseText) {
   let msgs = responseText
   msgs = JSON.parse(msgs)
   if(msgs.length < 1) {
-    addMsgEle('<div class="post">Waiting for more messages ...<div class="meta">... your friendly streamer.</div></div>')
+    addMsgEle('<div class="post">Waiting for more messages ...\
+<div class="meta">... your friendly streamer.</div></div>')
       setTimeout(function() {
        loadJson('msgs', doAfterJsonLoaded)
       }, 5000)
     return
   }
   addMsgEle(msgs.shift())
-  const streamLoop = setInterval(function() {
+  startStream(msgs)
+}
+
+
+function listenPauseButton() {   
+  pauseEle.onclick = function(eve) {
+    if(eve.target.innerHTML.trim() == 'Pause') {
+      clearInterval(streamLoop)
+      eve.target.innerHTML = 'Start'
+    }
+    else {
+      startStream()
+      eve.target.innerHTML = 'Pause'
+    }
+  }
+}
+
+
+function startStream() {
+  streamLoop = setInterval(function() {
     if(msgs.length < 2) {
       clearInterval(streamLoop)
       setTimeout(function() {
@@ -54,5 +65,5 @@ function doAfterJsonLoaded(responseText) {
   }, 5000);
 }
 
-
+listenPauseButton()
 loadJson('msgs', doAfterJsonLoaded)
