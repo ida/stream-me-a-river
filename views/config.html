@@ -1,0 +1,23 @@
+<html lang="en-gb">
+  <head>
+    <title>River config</title>
+    <meta name="description" content="Config for crystream me a river">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/load.js"></script>
+    <script src="/config.js"></script>
+  </head>
+  <body>
+    <form action="/config" method="post">
+        <label>Streams</label><br>
+        <input type="checkbox" name="stream_home" value="home"> Home<br>
+        <input type="radio" name="stream_scope" value="local"> Local<br>
+        <input type="radio" name="stream_scope" value="global" checked> Global<br>
+        <input type="checkbox" name="stream_messages" value="messages"> Messages<br>
+        <input type="submit" value="Submit">
+      </form>
+  </body>
+</html>

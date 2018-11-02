@@ -1,6 +1,5 @@
 const Connector = require('./connector.js');
 const apiConnections = new Connector(process.env.CREDS);
-
 const maxMsgsAmount = 500
 
 let count = 0
@@ -33,13 +32,22 @@ function invokeStream(apiConnection, streamName) {
 }
 
 
-function invokeStreams(streamName='public/local') {
+function invokeStreams(streamName='public') {
   // streamName = 'public'       // Federation timeline
   // streamName = 'public/local' // Instance timeline
   // streamName = 'user'         // Home timeline
   // streamName = 'direct'       // Direct messages
-  for(let i in apiConnections) {
-    invokeStream(apiConnections[i], streamName)
+  let streamTypes = ['public', 'public/local'] // TODO: get of config
+  let allowedStreamTypes = ['public', 'public/local']
+  for(let i in streamTypes) {
+    if(allowedStreamTypes.indexOf(streamTypes[i]) != -1) {
+      for(let j in apiConnections) {
+        invokeStream(apiConnections[j], streamTypes[i])
+      }
+    }
+    else {
+      console.log('Warning: Ignoring "' +  streamTypes[i] +                   '", because it\'s not an allowed stream-type.')
+    }
   }
 }
 

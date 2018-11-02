@@ -3,9 +3,11 @@ let streamLoop = null
 const msgsEle = document.querySelector('#stream')
 const pauseEle = document.querySelector('#stop-or-start')
 
+
 function getHeight(ele) {
   return parseFloat(getComputedStyle(ele).getPropertyValue('height'))
 }
+
 
 function addMsgEle(msg) {
   const msgEle = document.createElement('div')
@@ -21,6 +23,7 @@ function addMsgEle(msg) {
     }
   });
 }
+
 
 function doAfterJsonLoaded(responseText) {
   let msgs = responseText
@@ -65,5 +68,11 @@ function startStream() {
   }, 5000);
 }
 
-listenPauseButton()
-loadJson('msgs', doAfterJsonLoaded)
+
+function main() {
+  listenPauseButton()
+  loadJson('msgs', doAfterJsonLoaded)
+}
+
+
+main()
