@@ -2,19 +2,27 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   function doAfterConfigLoaded(configAsJsonString) {
+
+    let field = null
+
     const form = document.getElementsByTagName('form')[0]
-    // Deselect all fields: 
+
     // Get streamTypes of config:
     let config = JSON.parse(configAsJsonString)
-console.log(config)
-    let streamTypes = []
+
+    // Deselect all fields: 
+    for(let i=0; i < form.elements.length; i++) {
+      field = form.elements[i]
+      if(field.type == 'checkbox') {
+        field.checked = false
+      }
+    }
+      
+    // Select fields according to config:
     for(let fieldName in config) {
       let streamType = config[fieldName]
-    // Select fields according to config:
-//      console.log()
-        let field = document.getElementsByName(fieldName)[0]
+        field = document.getElementsByName(fieldName)[0]
         field.checked = true
-      streamTypes.push(streamType)
     }
   }
 
