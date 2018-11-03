@@ -1,10 +1,4 @@
- function loadJson(path, callback) {
-
-   if(callback === null) {
-    callback = function(responseText) {
-      console.log(responseText) 
-    }
-  }
+function loadJson(path, callback) {
 
   var xobj = new XMLHttpRequest();
   xobj.overrideMimeType("application/json");

@@ -1,3 +1,4 @@
+const files = require('./files.js');
 const Connector = require('./connector.js');
 const apiConnections = new Connector(process.env.CREDS);
 const maxMsgsAmount = 500
@@ -18,12 +19,21 @@ module.exports = class Streams {
     return currentMsgs
   }
 
+  invokeStreams() {
+    invokeStreams()
+  }
 }
 
 
 function invokeStream(apiConnection, streamName) {
+  // streamName = 'public'       // Federation timeline
+  // streamName = 'public/local' // Instance timeline
+  // streamName = 'user'         // Home timeline
+  // streamName = 'direct'       // Direct messages
 
   let stream = apiConnection.stream('streaming/' + streamName)
+
+  console.log('\nStreaming', stream.requestOptions.url)
 
   listenStream(stream)
 
@@ -32,23 +42,30 @@ function invokeStream(apiConnection, streamName) {
 }
 
 
-function invokeStreams(streamName='public') {
-  // streamName = 'public'       // Federation timeline
-  // streamName = 'public/local' // Instance timeline
-  // streamName = 'user'         // Home timeline
-  // streamName = 'direct'       // Direct messages
-  let streamTypes = ['public', 'public/local'] // TODO: get of config
-  let allowedStreamTypes = ['public', 'public/local']
-  for(let i in streamTypes) {
-    if(allowedStreamTypes.indexOf(streamTypes[i]) != -1) {
-      for(let j in apiConnections) {
-        invokeStream(apiConnections[j], streamTypes[i])
+function invokeStreams() {
+  
+  let allowedStreamTypes = ['public', 'public/local', 'user', 'direct']//, 'messages']
+  let streamType  = null
+  let streamTypes = null
+
+  files.readFile('public/config.json', function(fileContent) {
+
+    streamTypes = JSON.parse(fileContent)
+
+    for(let key in streamTypes) {
+
+      if(allowedStreamTypes.indexOf(streamTypes[key]) != -1) {
+
+        for(let j in apiConnections) {
+
+          invokeStream(apiConnections[j], streamTypes[key])
+        }
+      }
+      else {
+        console.log('Warning: Ignoring "' +  streamTypes[key] +                   '", because it\'s not an allowed stream-type.')
       }
     }
-    else {
-      console.log('Warning: Ignoring "' +  streamTypes[i] +                   '", because it\'s not an allowed stream-type.')
-    }
-  }
+  });
 }
 
 

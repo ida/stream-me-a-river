@@ -17,6 +17,7 @@ function connectApi(apiUrl, accessToken) {
     timeout_ms:   60*1000,
     api_url:      apiUrl,
   });
+  console.debug('\nConnected to "' + apiUrl + '" with ' + accessToken.slice(0, 7))
 
   return apiConnection
 }
