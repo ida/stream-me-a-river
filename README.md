@@ -5,28 +5,11 @@ Prototype for merging several streams of several
 mastodon-accounts into one river.
 
 
-Wording
--------
-
-
-__post__:
-
-In the mastodon-world called "toot". Keeping it
-general, as we potentially want to support other
-fediverse-compliant instances, too.
-
-
-__instance__:
-
-A mastodon- or other fediverse-server,
-e.g. "mastodon.social".
-
-
 What
 ----
 
 
-1. Show public local streams of several mastodon-instances.
+1. Show streams of several mastodon-instances in one stream.
 
 2. Prepend one post after another in the stream-view
    with a pause of same duration between the posts,
@@ -36,30 +19,6 @@ What
 3. Don't show images or other media, only textual information.
 
 4. Show only the message and the sender's name in a post.
-
-
-
-Why
----
-
-
-1. One open browser-tab is better than several open browser tabs.
-
-
-2. The constant movement causes less stress to many readers in
-comparison to the standard mastodon-interface where posts plop
-in very irregularly, and if you're currently reading a post it
-can suddenly drop down under the viewable screen and then the
-next messages pour in, and where was that post again? Aaahhh.
-
-
-3. Sometime images can be additional stressful for various reasons,
-sometimes all we want are your words.
-(Also see the song "Bitte gib' mir noch ein" from "Wir Sind Helden")
-
-
-4. Less is more.
-
 
 
 
@@ -83,6 +42,50 @@ and development, see section 'development' below.
 The file './.env.example' shows the expected format.
 It is a special file, that stays hidden from others aand is not
 copied. Also, you should not share your tokens with others.
+
+
+4. By default the local tmelines are displayed,, you can change that to your
+home-timelines e.g., see the function `invokeStreams` in the file './streams.js' for possibile streams and changing the stream-type.
+
+
+
+
+Why
+---
+
+The following  numbers correlate with the ones of section 'What' above.
+
+1. One open browser-tab is better than several open browser tabs.
+
+
+2. The constant movement causes less stress to many readers in
+comparison to the standard mastodon-interface where posts plop
+in very irregularly and several at once.
+
+3. Sometime images can be additional stressful for various reasons,
+sometimes all we want are words.
+
+
+4. Less is more.
+
+
+
+
+Wording
+-------
+
+
+__post__:
+
+In the mastodon-world called "toot". Keeping it
+general, as we potentially want to support other
+fediverse-compliant instances, too.
+
+
+__instance__:
+
+A mastodon- or other fediverse-server,
+e.g. "mastodon.social".
 
 
 
@@ -129,7 +132,7 @@ and open 'localhost:[PORT_NR]' in a browser. You're done.
 Future
 ======
 
-- Provide config in UI for selecting stream-types (direct-messages, follower-toots). If you cloned a development-version you can change the type in
+- Provide config in UI for selecting stream-types (direct-messages, follower-toots). If you cloned a development-version you can change the stream-type in
 './stream.js'.
 
 - Toot a toot to several accounts.
@@ -139,10 +142,12 @@ only a locally installed app would be recommendable, otherwise these
 posts are publicly readable.
 
 
+
 Author
 ======
 
 Ida Ebkes, 2018.
+
 
 
 License
