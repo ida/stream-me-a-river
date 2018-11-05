@@ -14,7 +14,7 @@ function writeFile(path, content='', callback=null) {
 
       if(callback !== null) callback()
 
-      console.debug(content, "\nFile '" + path + "' was saved.")
+      console.debug("\nFile '" + path + "' was saved.")
 
   });
 
@@ -29,5 +29,7 @@ function readFile(path, callback) {
 }
 
 
+module.exports.write = writeFile
+module.exports.read = readFile
 module.exports.writeFile = writeFile
 module.exports.readFile = readFile

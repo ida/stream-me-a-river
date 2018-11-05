@@ -1,7 +1,7 @@
 let msgs = []
 let streamLoop = null
 const msgsEle = document.querySelector('#stream')
-const pauseEle = document.querySelector('#stop-or-start')
+const pauseEle = document.getElementById('stop-or-start')
 
 
 function getHeight(ele) {
@@ -29,11 +29,10 @@ function doAfterJsonLoaded(responseText) {
   let msgs = responseText
   msgs = JSON.parse(msgs)
   if(msgs.length < 1) {
-    addMsgEle('<div class="post">Waiting for more messages ...\
-<div class="meta">... your friendly streamer.</div></div>')
-      setTimeout(function() {
-       loadJson('msgs', doAfterJsonLoaded)
-      }, 5000)
+    addMsgEle('Waiting for messages.')
+    setTimeout(function() {
+     loadJson('msgs', doAfterJsonLoaded)
+    }, 5000)
     return
   }
   addMsgEle(msgs.shift())
@@ -41,15 +40,21 @@ function doAfterJsonLoaded(responseText) {
 }
 
 
-function listenPauseButton() {   
+function listenPauseButton() {
+  let pauseHtml = '&#9646;&#9646;'
+  let playHtml = '&#9654;'
   pauseEle.onclick = function(eve) {
-    if(eve.target.innerHTML.trim() == 'Pause') {
+    eve.preventDefault()
+    console.log(eve.target.name)
+    if(eve.target.className == 'pause') {
       clearInterval(streamLoop)
-      eve.target.innerHTML = 'Start'
+      eve.target.className = 'start'
+      eve.target.innerHTML = playHtml
     }
     else {
       startStream()
-      eve.target.innerHTML = 'Pause'
+      eve.target.className = 'pause'
+      eve.target.innerHTML = pauseHtml
     }
   }
 }

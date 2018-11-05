@@ -1,12 +1,26 @@
+const Files = require('./files.js')
 const Masto = require('mastodon-api')
 
 
 module.exports = class Connector {
 
   constructor(credentialsAsJsonStr) {
-    return connectApis(credentialsAsJsonStr)
-  }
 
+    if(credentialsAsJsonStr !== undefined) {
+      return connectApis(credentialsAsJsonStr)
+    }
+console.debug('ohoh')
+
+/*
+    // When running locally we cannot read creds from process.env,
+    // read of file and extract json-str:
+    Files.read('.env', function(content) {
+      content = content.trim()
+      credentialsAsJsonStr = content.slice(7, content.length-1)
+      return connectApis(credentialsAsJsonStr)
+    });
+*/
+  }
 }
 
 

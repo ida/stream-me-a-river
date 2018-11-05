@@ -1,16 +1,18 @@
-const files = require('./files.js');
+const Files = require('./files.js');
 const Connector = require('./connector.js');
-const apiConnections = new Connector(process.env.CREDS);
+
 const maxMsgsAmount = 500
 
 let count = 0
 let msgs = []
+let apiConnections = null
+
 
 
 module.exports = class Streams {
 
   constructor() {
-    invokeStreams()
+    getCredsAndConnectToApis()
   }
 
   getMsgs() {
@@ -20,8 +22,38 @@ module.exports = class Streams {
   }
 
   invokeStreams() {
-    invokeStreams()
+    invokeStreams(apiConnections)
   }
+
+}
+
+
+function connectAndStream(credentialsAsJsonStr) {
+  apiConnections = new Connector(credentialsAsJsonStr)
+  invokeStreams(apiConnections)
+}
+
+
+function getCredsAndConnectToApis() {
+
+  let credentialsAsJsonStr = null
+
+  // If app runs on glitch.com, get creds from process:
+  if(process.env.CREDS !== undefined) {
+    credentialsAsJsonStr = process.env.CREDS
+    connectAndStream(credentialsAsJsonStr)
+  }
+  // If app runs locally, get creds from secret-file:
+  else {
+    Files.read('.env', function(content) {
+      // We expect content to be CREDS='{ ... }' and cut off everything
+      // before and after curly brackets to get the json-str:
+      content = content.trim() // remove possible trailing spcaes
+      credentialsAsJsonStr = content.slice(7, content.length-1)
+      connectAndStream(credentialsAsJsonStr)
+    });
+  }
+
 }
 
 
@@ -42,13 +74,13 @@ function invokeStream(apiConnection, streamName) {
 }
 
 
-function invokeStreams() {
-  
+function invokeStreams(apiConnections) {
+
   let allowedStreamTypes = ['public', 'public/local', 'user', 'direct']//, 'messages']
   let streamType  = null
   let streamTypes = null
 
-  files.readFile('public/config.json', function(fileContent) {
+  Files.read('public/config.json', function(fileContent) {
 
     streamTypes = JSON.parse(fileContent)
 

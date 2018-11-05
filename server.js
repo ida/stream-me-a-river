@@ -1,8 +1,8 @@
-const files = require('./files.js')
-
 const Streams = require('./streams.js')
 
 const river = new Streams()
+
+const files = require('./files.js')
 
 const bodyParser = require("body-parser")
 
@@ -50,8 +50,10 @@ app.get("/msgs", (request, response) => {
 
 
 //const listener = app.listen(process.env.PORT, () => {  
-const listener = app.listen(8080, () => {  
+const listener = app.listen(8080, (err) => {
+if(err) return console.debug(err)
 
-  console.log('\nListening to port', listener.address());
+
+  console.log('\nListening to port', listener.address().port);
 
 });
