@@ -36,23 +36,13 @@ function connectAndStream(credentialsAsJsonStr) {
 
 function getCredsAndConnectToApis() {
 
-  let credentialsAsJsonStr = null
-
-  // If app runs on glitch.com, get creds from process:
-  if(process.env.CREDS !== undefined) {
-    credentialsAsJsonStr = process.env.CREDS
+  Files.read('.env', function(content) {
+    content = content.trim() // remove possible trailing spcaes
+    // We expect content to be CREDS='{ ... }' and cut off everything
+    // before and after curly brackets to get the json-str:
+    let credentialsAsJsonStr = content.slice(7, content.length-1)
     connectAndStream(credentialsAsJsonStr)
-  }
-  // If app runs locally, get creds from secret-file:
-  else {
-    Files.read('.env', function(content) {
-      // We expect content to be CREDS='{ ... }' and cut off everything
-      // before and after curly brackets to get the json-str:
-      content = content.trim() // remove possible trailing spcaes
-      credentialsAsJsonStr = content.slice(7, content.length-1)
-      connectAndStream(credentialsAsJsonStr)
-    });
-  }
+  });
 
 }
 
