@@ -49,10 +49,7 @@ app.get("/msgs", (request, response) => {
 
 
 
-//const listener = app.listen(process.env.PORT, () => {  
 const listener = app.listen(8080, (err) => {
-if(err) return console.debug(err)
-
 
   console.log('\nListening to port', listener.address().port);
 

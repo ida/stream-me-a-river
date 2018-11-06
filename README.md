@@ -12,13 +12,9 @@ What
 1. Show streams of several mastodon-instances in one stream.
 
 2. Prepend one post after another in the stream-view
-   with a pause of same duration between the posts,
+   with a pause of *same duration* between the posts,
    and increase height linear pixel by pixel from
    zero to full height.
-
-3. Don't show images or other media, only textual information.
-
-4. Show only the message and the sender's name in a post.
 
 
 
@@ -32,20 +28,17 @@ You can use this awesome online-tool:
 
 
 
-2. [Remix this on glitch](https://glitch.com/edit/#!/laser-volleyball)
-for using the app right away, or clone it from the repo, for local use
-and development, see section 'development' below.
+2. [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/stream-me-a-river)
+for using and modifying the app right away online in the browser.
+*Or* clone it from the repo, for local use, see section 'development' below.
 
 
 3. Add a file '.env' and insert the instances' URLs
 (e.g. 'https://mastodon.social') and the tokens in it.
 The file './.env.example' shows the expected format.
-It is a special file, that stays hidden from others aand is not
-copied. Also, you should not share your tokens with others.
-
-
-4. By default the local tmelines are displayed,, you can change that to your
-home-timelines e.g., see the function `invokeStreams` in the file './streams.js' for possibile streams and changing the stream-type.
+It is a special file which stays hidden from others and is not
+copied on a remix or commited in a repo.
+Also, you should not share your tokens with others.
 
 
 
@@ -57,35 +50,9 @@ The following  numbers correlate with the ones of section 'What' above.
 
 1. One open browser-tab is better than several open browser tabs.
 
-
 2. The constant movement causes less stress to many readers in
 comparison to the standard mastodon-interface where posts plop
 in very irregularly and several at once.
-
-3. Sometime images can be additional stressful for various reasons,
-sometimes all we want are words.
-
-
-4. Less is more.
-
-
-
-
-Wording
--------
-
-
-__post__:
-
-In the mastodon-world called "toot". Keeping it
-general, as we potentially want to support other
-fediverse-compliant instances, too.
-
-
-__instance__:
-
-A mastodon- or other fediverse-server,
-e.g. "mastodon.social".
 
 
 
@@ -132,8 +99,6 @@ and open 'localhost:[PORT_NR]' in a browser. You're done.
 Future
 ======
 
-- Provide config in UI for selecting stream-types (direct-messages, follower-toots). If you cloned a development-version you can change the stream-type in
-'./stream.js'.
 
 - Toot a toot to several accounts.
 

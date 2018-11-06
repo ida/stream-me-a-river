@@ -1,20 +1,28 @@
 var fs = require('fs');
 
 
-function onError(error) {
-  return console.log(error)
+function copyFile(sourcePath, destinationPath) {
+
+	fs.copyFile(sourcePath, destinationPath, (error) => {
+
+		if(err) throw err
+
+		console.log(`Copied ${sourcePath} to ${destinationPath}.`)
+
+	});
+
 }
 
 
 function writeFile(path, content='', callback=null) {
 
-  fs.writeFile(path, content, function(err) {
+  fs.writeFile(path, content, function(error) {
 
-      if(err) onError()
+    if(error) throw error
 
-      if(callback !== null) callback()
+    if(callback !== null) callback()
 
-      console.debug("\nFile '" + path + "' was saved.")
+		console.log(`Saved ${path}.`)
 
   });
 
@@ -22,14 +30,17 @@ function writeFile(path, content='', callback=null) {
 
 
 function readFile(path, callback) {
+
 	fs.readFile(path, 'utf-8', (err, data) => {
+
 		if(err) throw err
+
 		callback(data)
+
 	});
 }
 
 
-module.exports.write = writeFile
+module.exports.copy = copyFile
 module.exports.read = readFile
-module.exports.writeFile = writeFile
-module.exports.readFile = readFile
+module.exports.write = writeFile
