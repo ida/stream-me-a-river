@@ -7,7 +7,6 @@ function setConfigObjectOfFileAndWriteConfigForm(configPath, callback) {
   configFilePath = configPath
   files.read(configFilePath, function(content) {
     config = JSON.parse(content)
-    writeConfigForm()
     callback(config)
   })
 }
@@ -18,6 +17,9 @@ function genConfigHtml() {
   html += '<link rel="stylesheet" href="../styles/style.css">'
   html += '<script src="../scripts/helpers/load.js"></script>'
   html += '<script src="../scripts/config.js"></script>'
+  html += '<label>'
+  html += 'Select streams'
+  html += '</label>'
   html += '<form action="/config" method="post">'
   for(let sourceName in sources) {
     if(sourceName != 'default') {
