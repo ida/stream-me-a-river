@@ -10,6 +10,11 @@
           "title": "Home",
           "selected": false
         },
+        "local": {
+          "value": "public/local",
+          "title": "Local",
+          "selected": true
+        },
           "global": {
           "value": "public",
           "title": "Global",
