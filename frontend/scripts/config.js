@@ -1,3 +1,8 @@
+const configJsonFilePath = '/data/config.json'
+
+// After elements loaded, load configJsonFile, read selected fileds of it
+// and select fields accordingly.
+
 document.addEventListener('DOMContentLoaded', function() {
 
   function doAfterConfigLoaded(configAsJsonString) {
@@ -20,14 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Select fields according to config:
     for(let fieldName in config) {
       let streamType = config[fieldName]
-        field = document.getElementsByName(fieldName)[0]
-        field.checked = true
+      field = document.getElementsByName(fieldName)[0]
+      field.checked = true
     }
   }
 
-  // Load config (loadJson is defined in public/load.js):
-  loadJson('/config.json', doAfterConfigLoaded) 
 
+  // Load config:
+  loadJson(configJsonFilePath, doAfterConfigLoaded)
 
 
 });

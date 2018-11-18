@@ -1,16 +1,20 @@
-let msgs = []
-let streamLoop = null
 const msgsEle = document.querySelector('#stream')
 const pauseEle = document.getElementById('stop-or-start')
 
+
+let msgs = []
+
+let streamLoop = null
+let waitingForMessagesAmount = 0
 
 function getHeight(ele) {
   return parseFloat(getComputedStyle(ele).getPropertyValue('height'))
 }
 
 
-function addMsgEle(msg) {
+function addMsgEle(msg, className='') {
   const msgEle = document.createElement('div')
+  msgEle.className = className
   msgEle.innerHTML = msg
   msgsEle.insertBefore(msgEle, msgsEle.firstChild)
   let height = getHeight(msgEle)
@@ -26,17 +30,32 @@ function addMsgEle(msg) {
 
 
 function doAfterJsonLoaded(responseText) {
-  let msgs = responseText
+  msgs = responseText
   msgs = JSON.parse(msgs)
+
   if(msgs.length < 1) {
-    addMsgEle('Waiting for messages.')
+    if(msgsEle.firstChild.className !== undefined
+    && msgsEle.firstChild.className.indexOf('info') != -1) {
+      msgsEle.firstChild.remove()
+    }
+    waitingForMessagesAmount += 1
+    if(waitingForMessagesAmount == 1)   addMsgEle('Waiting for messages.', 'info')
+    if(waitingForMessagesAmount == 2)   addMsgEle('Still waiting for messages.', 'info')
+    if(waitingForMessagesAmount == 3)   addMsgEle('No messages, gonna wait.', 'info')
+    if(waitingForMessagesAmount == 4) { addMsgEle('Need to wait a little more.', 'info')
+      waitingForMessagesAmount = 0
+    }
     setTimeout(function() {
      loadJson('msgs', doAfterJsonLoaded)
     }, 5000)
     return
   }
+
+
   addMsgEle(msgs.shift())
-  startStream(msgs)
+
+  startRiver(msgs)
+
 }
 
 
@@ -45,14 +64,13 @@ function listenPauseButton() {
   let playHtml = '&#9654;'
   pauseEle.onclick = function(eve) {
     eve.preventDefault()
-    console.log(eve.target.name)
     if(eve.target.className == 'pause') {
       clearInterval(streamLoop)
       eve.target.className = 'start'
       eve.target.innerHTML = playHtml
     }
     else {
-      startStream()
+      startRiver()
       eve.target.className = 'pause'
       eve.target.innerHTML = pauseHtml
     }
@@ -60,7 +78,7 @@ function listenPauseButton() {
 }
 
 
-function startStream() {
+function startRiver() {
   streamLoop = setInterval(function() {
     if(msgs.length < 2) {
       clearInterval(streamLoop)
@@ -75,6 +93,7 @@ function startStream() {
 
 
 function main() {
+  msgs = []
   listenPauseButton()
   loadJson('msgs', doAfterJsonLoaded)
 }

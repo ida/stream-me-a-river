@@ -4,7 +4,7 @@
   "description": "Several fediverse-streams in one view.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node ini.js"
   },
   "dependencies": {
     "express": "^4.16.2",

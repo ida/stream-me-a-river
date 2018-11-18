@@ -22,20 +22,28 @@ function writeFile(path, content='', callback=null) {
 
     if(callback !== null) callback()
 
-		console.log(`Saved ${path}.`)
+		console.log(`Wrote ${path}`)
 
   });
 
 }
 
 
-function readFile(path, callback) {
+function readFile(path, callback, onError=null) {
 
 	fs.readFile(path, 'utf-8', (err, data) => {
 
-		if(err) throw err
-
-		callback(data)
+		if(err) {
+      if(onError !== null) {
+        onError(err)
+      }
+      else {
+        throw err
+      }
+    }
+    else {
+		  callback(data)
+    }
 
 	});
 }

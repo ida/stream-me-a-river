@@ -12,10 +12,11 @@ What
 1. Show streams of several mastodon-instances in one stream.
 
 2. Prepend one post after another in the stream-view
-   with a pause of *same duration* between the posts,
-   and increase height linear pixel by pixel from
-   zero to full height.
+   with a pause of same duration between the posts,
+   and increase height in a smooth transition.
 
+3. Let user configure which kind of streans should be started
+   and store selection permanently.
 
 
 How
@@ -30,7 +31,7 @@ You can use this awesome online-tool:
 
 2. [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/stream-me-a-river)
 for using and modifying the app right away online in the browser.
-*Or* clone it from the repo, for local use, see section 'development' below.
+*Or* clone it from the repo for local use, see section 'development' below.
 
 
 3. Add a file '.env' and insert the instances' URLs
@@ -102,9 +103,16 @@ Future
 
 - Toot a toot to several accounts.
 
-Nota: For reading non-public posts such as direct-messages or tooting,
+Nota: For reading non-public posts such as direct-messages,
 only a locally installed app would be recommendable, otherwise these
 posts are publicly readable.
+
+
+
+Credits
+=======
+
+This app uses the node-packages express and mastodon-api.
 
 
 
