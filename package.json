@@ -2,9 +2,9 @@
   "name": "stream-me-a-river",
   "version": "0.0.1",
   "description": "Several fediverse-streams in one view.",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node ini.js"
+    "start": "node main.js"
   },
   "dependencies": {
     "express": "^4.16.2",
