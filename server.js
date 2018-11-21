@@ -32,7 +32,7 @@ app.post("/config", (request, response) => {
   let selectedFields = request.body
 
   // Write frontend-config:
-  files.write(frontendConfigFilePath, JSON.stringify(selectedFields))
+  files.write(config.paths.data.frontend, JSON.stringify(selectedFields))
 
 
   // Update config-object:
@@ -51,9 +51,8 @@ app.post("/config", (request, response) => {
     config.sources[sourceName].streamTypes[fieldType].selected = true
   }
 
-  // Pass updated config to river:
-
   app.river.updateConfig(config)
+
 
   // Go to main-page:
   response.redirect('/')
@@ -66,7 +65,7 @@ app.get("/msgs", (request, response) => {
 
 exports.Server = class Server {
   constructor(river) {
-    app.river = river    
+    app.river = river
   }
   serve(portNr=8080) {
     const listener = app.listen(portNr, (err) => {

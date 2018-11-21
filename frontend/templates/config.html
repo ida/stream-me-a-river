@@ -1,12 +1,38 @@
-<link rel="stylesheet" href="../styles/style.css"><script src="../scripts/helpers/load.js"></script><script src="../scripts/config.js"></script><form action="/config" method="post"><fieldset><label>default</label>
+<link rel="stylesheet" href="../styles/style.css"><script src="../scripts/helpers/load.js"></script><script src="../scripts/config.js"></script><label>Select streams</label><form action="/config" method="post"><fieldset><label>social.nasqueron.org</label>
 <div class="field">
-<input name="default.home"
+<input name="social.nasqueron.org.home"
        type="checkbox"
        value="user">
   Home
 </div>
 <div class="field">
-<input name="default.global"
+<input name="social.nasqueron.org.local"
+       type="checkbox"
+       value="public/local"
+       checked>
+  Local
+</div>
+<div class="field">
+<input name="social.nasqueron.org.global"
+       type="checkbox"
+       value="public">
+  Global
+</div></fieldset><fieldset><label>social.tchncs.de</label>
+<div class="field">
+<input name="social.tchncs.de.home"
+       type="checkbox"
+       value="user">
+  Home
+</div>
+<div class="field">
+<input name="social.tchncs.de.local"
+       type="checkbox"
+       value="public/local"
+       checked>
+  Local
+</div>
+<div class="field">
+<input name="social.tchncs.de.global"
        type="checkbox"
        value="public">
   Global

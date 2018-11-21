@@ -1,4 +1,4 @@
-const configurator = require('./config')
+const configurator = require('./configurator')
 const files = require('./helpers/files')
 const Source = require('./source').Source
 
@@ -84,11 +84,11 @@ exports.River = class River {
     for(let i in this.sources) {
       this.sources[i].stopStreams()
     }
+    this.config = config
     this.sources = []
-    configurator.updateConfig(config)
-    this.config = configurator.getConfig()
     messages = []
     this.startSources()
+    configurator.writeConfig(config)
   }
 
 
