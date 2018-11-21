@@ -1,5 +1,4 @@
 const templatesPath = __dirname + '/frontend/templates/'
-const frontendConfigFilePath = __dirname + '/frontend/data/config.json'
 
 const files = require('./backend/helpers/files.js')
 
