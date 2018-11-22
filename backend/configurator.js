@@ -4,7 +4,6 @@ const filesystem = require('fs')
 function createDirectory(path) {
   if(filesystem.existsSync(path) === false) {
     filesystem.mkdirSync(path);
-    console.info('Created', path)
   }
 }
 function createDirectories(paths) {
@@ -204,7 +203,7 @@ function getCredentialsOfSecretFile(secretFilePath) {
 
 
 function writeConfigFile(config) {
-  writeFile(config.paths.data.backend, JSON.stringify(config))
+  writeFile(config.paths.backend, JSON.stringify(config))
 }
 
 
@@ -239,14 +238,14 @@ function ini(paths, callback) {
   }
 
   // Write config-file for permanent storage, if necessary:
-  if(fileExists(config.paths.data.backend) === false || configChanged === true) {
+  if(fileExists(configFilePath) === false || configChanged === true) {
     writeConfigFile(config)
   }
 
 
   if(fileExists(sendFormPath) === false || configChanged === true) {
-  }
     writeFile(sendFormPath, genSendHtml(config))
+  }
 
 
   callback(credentials, config)
