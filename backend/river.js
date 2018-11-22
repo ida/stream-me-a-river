@@ -51,7 +51,7 @@ exports.River = class River {
           }
         )
         .then(function(response) {
-          report += ' ' + response.data.uri
+          report += '<br>' + response.data.uri
           if(i == sourcesAmount-1) {
             doWithResponse(report)
           }

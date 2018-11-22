@@ -7,6 +7,14 @@ body {
   background: lightyellow;
   color: #333;
 }
+
+  header a {
+    text-decoration: none;
+  }
+    .pause {
+      letter-spacing: -0.1em;
+    }
+
   main#stream {
     width: 80%;
     max-width: 600px;
