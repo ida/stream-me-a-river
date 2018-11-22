@@ -37,6 +37,38 @@ exports.River = class River {
   }
 
 
+  sendMessage(query, doWithResponse) {
+    let report = 'Message sended to '
+    let sourcesAmount = this.sources.length
+    for(let i in this.sources) {
+      let source = this.sources[i]
+      let sourceName = source['name']
+      if(query[sourceName] !== undefined) {
+        source.connection.post(
+          'statuses', {
+            status: query.message,
+            visibility: 'direct'
+          }
+        )
+        .then(function(response) {
+          if(i > 0) {
+            report += ' and '
+          }
+          report += '"' + sourceName + '"'
+          if(i == sourcesAmount-1) {
+            report += '.'
+            doWithResponse(report)
+          }
+        })
+        .catch(function(reason) {
+          console.error("Couldn't send message to ", sourceName,
+                        "because of", reason)
+        });
+      }
+    }
+  }
+
+
   startSources() {
 
     messagesTotalAmount = 0
@@ -69,11 +101,11 @@ exports.River = class River {
 
       // Inititalize source:
       let apiUrl = url + '/api/v1/'
-      let source = new Source(apiUrl,
+      let source = new Source(sourceName,
+                              apiUrl,
                               accessToken,
                               streamTypesObj,
                               messageHandler);
-
       this.sources.push(source)
     }
 

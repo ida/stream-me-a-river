@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 
+
 app.get("/", (request, response) => {
   response.sendFile(templatesPath + 'index.html')
 });
@@ -23,6 +24,37 @@ app.get("/", (request, response) => {
 
 app.get("/config", (request, response) => {
   response.sendFile(templatesPath + 'config.html')
+});
+
+
+app.get("/msgs", (request, response) => {
+  response.send(app.river.getMessages())
+});
+
+
+
+app.get("/send", (request, response) => {
+  response.sendFile(templatesPath + 'send.html')
+});
+
+
+
+app.get("/received", (request, response) => {
+  let sendedResponse = request.query["sendedResponse"]
+  if(sendedResponse === undefined) {
+    sendedResponse =
+      'Error: No query-param named "sendedResponse" was found as expected!'
+  }
+  response.send(sendedResponse)
+});
+
+
+
+app.post("/send", (request, response) => {
+  app.river.sendMessage(request.body, function(sendedResponse) {
+    sendedResponse = encodeURI(sendedResponse)
+    response.redirect('/received?sendedResponse=' + sendedResponse)
+  });
 });
 
 
@@ -58,9 +90,6 @@ app.post("/config", (request, response) => {
 });
 
 
-app.get("/msgs", (request, response) => {
-  response.send(app.river.getMessages())
-});
 
 exports.Server = class Server {
   constructor(river) {

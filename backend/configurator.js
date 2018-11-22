@@ -141,6 +141,50 @@ function genSourceHtml(sourceName, sources) {
 }
 
 
+function genSendHtml(config) {
+let html = `
+<html lang="en-gb">
+  <head>
+    <title>Send message</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../styles/style.css">
+  </head>
+  <body>
+    <form action="/send" method="post">
+      <label>
+        Write a message
+      </label>
+      <br>
+        <textarea name="message">Test message</textarea>
+      <br>
+`
+
+  for(let sourceName in config.sources) {
+html += `<div class="field">
+<input name="${sourceName}"
+       type="checkbox"
+       value="${sourceName}"
+       checked>
+  ${sourceName}
+</div>
+`
+
+  }
+
+html += `
+      <input type="submit" value="Send">
+    </form>
+  </body>
+</html>
+`
+  return html
+}
+function genSourcesHtml(sources=['ahah.soso.de','jaja.nene.org']) {
+}
+
+
 function getCredentialsOfSecretFile(secretFilePath) {
 //
 // Extract content wihthin brackets, return as JSON-object.
@@ -171,14 +215,17 @@ function ini(paths, callback) {
 
 
   // Set default config for the case config-file does not exist:
-  let config = { paths: paths, sources: {} }
-  let credentials = getCredentialsOfSecretFile(config.paths.secret)
+  let config = { paths: paths.data, sources: {} }
+  let credentials = getCredentialsOfSecretFile(paths.secret)
   let configChanged = false
 
+  let configFilePath = paths.data.backend
+  let configFormPath = paths.forms.config
+  let   sendFormPath = paths.forms.send
 
   // Read and set config of config-file for the case config-file exists:
-  if(fileExists(config.paths.data.backend)) {
-    config = readObjectOfFile(config.paths.data.backend)
+  if(fileExists(configFilePath)) {
+    config = readObjectOfFile(configFilePath)
   }
 
 
@@ -187,14 +234,19 @@ function ini(paths, callback) {
 
 
   // Write config-form for browser-user-input, if necessary:
-  if(fileExists(config.paths.form) === false || configChanged === true) {
-    writeFile(config.paths.form, genConfigHtml(config))
+  if(fileExists(configFormPath) === false || configChanged === true) {
+    writeFile(configFormPath, genConfigHtml(config))
   }
 
   // Write config-file for permanent storage, if necessary:
   if(fileExists(config.paths.data.backend) === false || configChanged === true) {
     writeConfigFile(config)
   }
+
+
+  if(fileExists(sendFormPath) === false || configChanged === true) {
+  }
+    writeFile(sendFormPath, genSendHtml(config))
 
 
   callback(credentials, config)

@@ -7,7 +7,10 @@ const paths = {
     backend: 'backend/data/config.json',
     frontend: 'frontend/data/config.json'
   },
-  form: 'frontend/templates/config.html',
+  forms: {
+    config: 'frontend/templates/config.html',
+    send: 'frontend/templates/send.html'
+  },
   secret: '.env'
 }
 

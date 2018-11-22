@@ -6,8 +6,8 @@ const Stream = require('./stream').Stream
 exports.Source = class Source {
 
 
-  constructor(apiUrl, accessToken, streamTypesObj, messageHandler) {
-
+  constructor(name, apiUrl, accessToken, streamTypesObj, messageHandler) {
+    this.name = name
     this.streams = []
     this.connection = new Masto({ api_url: apiUrl, access_token: accessToken })
     this.streamTypes = this.getStreamTypes(streamTypesObj)
