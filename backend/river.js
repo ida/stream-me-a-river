@@ -38,7 +38,7 @@ exports.River = class River {
 
 
   sendMessage(query, doWithResponse) {
-    let report = 'Message sended to '
+    let report = 'Message sended to'
     let sourcesAmount = this.sources.length
     for(let i in this.sources) {
       let source = this.sources[i]
@@ -51,12 +51,8 @@ exports.River = class River {
           }
         )
         .then(function(response) {
-          if(i > 0) {
-            report += ' and '
-          }
-          report += '"' + sourceName + '"'
+          report += ' ' + response.data.uri
           if(i == sourcesAmount-1) {
-            report += '.'
             doWithResponse(report)
           }
         })
