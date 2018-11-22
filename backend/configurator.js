@@ -1,5 +1,25 @@
 const filesystem = require('fs')
 
+
+function createDirectory(path) {
+  if(filesystem.existsSync(path) === false) {
+    filesystem.mkdirSync(path);
+    console.info('Created', path)
+  }
+}
+function createDirectories(paths) {
+  let path = ''
+  for(let i in paths) {
+    if(i != 0) path += '/'
+    path += paths[i]
+    createDirectory(path)
+  }
+}
+function createParents(filePath) {
+  let parentPath = filePath.split('/')
+  parentPath = parentPath.slice(0, parentPath.length-1)
+  createDirectories(parentPath)
+}
 function fileExists(filePath) {
   return filesystem.existsSync(filePath)
 }
@@ -12,6 +32,7 @@ function readObjectOfFile(filePath) {
   return object
 }
 function writeFile(filePath, string) {
+  createParents(filePath)
   filesystem.writeFileSync(filePath, string)
   console.log('Wrote', filePath)
 }
