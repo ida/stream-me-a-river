@@ -97,45 +97,48 @@ function compareSources(config, credentials) {
 
 function genConfigHtml(config) {
   let sources = config.sources
-  let html = ``
-  html += '<link rel="stylesheet" href="../styles/style.css">'
-  html += '<script src="../scripts/helpers/load.js"></script>'
-  html += '<script src="../scripts/config.js"></script>'
-  html += '<label>'
-  html += 'Select streams'
-  html += '</label>'
-  html += '<form action="/config" method="post">'
+  let html = `<html lang="en-gb">
+  <head>
+    <title>River config</title>
+    <meta name="description"
+          content="Congigure the streams of several mastodon-accounts.">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../styles/style.css">
+  </head>
+  <body>
+    <label>Select streams</label>
+    <form action="/config" method="post">
+`
   for(let sourceName in sources) {
     html += genSourceHtml(sourceName, sources)
   }
-  html += '<input type="submit" value="Save"></form>'
+  html += `      <input type="submit" value="Save">
+    </form>
+  </body>
+</html>`
   return html
 }
 
 
 function genSourceHtml(sourceName, sources) {
-  let html = '<fieldset>'
-  html += '<label>'
-  html += sourceName
-  html += '</label>'
   let source = sources[sourceName]
   let streamTypes = source.streamTypes
-  for(let streamTypeName in streamTypes) {
-    let streamTypeObj = streamTypes[streamTypeName]
-    html += `
-<div class="field">
-<input name="${sourceName}.${streamTypeName}"
-       type="checkbox"
-       value="${streamTypeObj.value}"`
-       if(streamTypeObj.selected === true) {
-         html += `
-       checked`
-       }
-       html += `>
-  ${streamTypeObj.title}
-</div>`
-  }
-  html += '</fieldset>'
+  let html = `      <fieldset>
+        <label>${sourceName}</label>`; for(let streamTypeName in streamTypes) {
+        let streamTypeObj = streamTypes[streamTypeName]; html += `
+        <div class="field">
+          <input name="${sourceName}.${streamTypeName}"
+                 type="checkbox"
+                 value="${streamTypeObj.value}"`
+                 if(streamTypeObj.selected === true) { html += `
+                 checked` } html +=
+                 `>
+          ${streamTypeObj.title}
+        </div>`} html += `
+      </fieldset>
+`
   return html
 }
 
@@ -173,14 +176,14 @@ html += `<div class="field">
   }
 
 html += `
+
+
       <input type="submit" value="Send">
     </form>
   </body>
 </html>
 `
   return html
-}
-function genSourcesHtml(sources=['ahah.soso.de','jaja.nene.org']) {
 }
 
 
@@ -203,7 +206,12 @@ function getCredentialsOfSecretFile(secretFilePath) {
 
 
 function writeConfigFile(config) {
-  writeFile(config.paths.backend, JSON.stringify(config))
+  writeFile(config.paths.data.sources, JSON.stringify(config))
+}
+
+function writeConfigForm(config) {
+  let html = genConfigHtml(config)
+  writeFile(config.paths.forms.sources, html)
 }
 
 
@@ -214,37 +222,34 @@ function ini(paths, callback) {
 
 
   // Set default config for the case config-file does not exist:
-  let config = { paths: paths.data, sources: {} }
-  let credentials = getCredentialsOfSecretFile(paths.secret)
+  let config = { paths: paths, sources: {} }
   let configChanged = false
+  let credentials = getCredentialsOfSecretFile(paths.secret)
 
-  let configFilePath = paths.data.backend
-  let configFormPath = paths.forms.config
-  let   sendFormPath = paths.forms.send
 
   // Read and set config of config-file for the case config-file exists:
-  if(fileExists(configFilePath)) {
-    config = readObjectOfFile(configFilePath)
+  if(fileExists(paths.data.sources)) {
+    config=readObjectOfFile(paths.data.sources)
   }
 
 
   // Update config, if backend-user (re-)edited credentials in secret-file:
   config, configChanged = compareSources(config, credentials)
 
-
   // Write config-form for browser-user-input, if necessary:
-  if(fileExists(configFormPath) === false || configChanged === true) {
-    writeFile(configFormPath, genConfigHtml(config))
+  if(fileExists(paths.forms.config) === false || configChanged === true) {
+    writeConfigForm(config)
   }
 
+
   // Write config-file for permanent storage, if necessary:
-  if(fileExists(configFilePath) === false || configChanged === true) {
+  if(fileExists(paths.data.sources) === false || configChanged === true) {
     writeConfigFile(config)
   }
 
 
-  if(fileExists(sendFormPath) === false || configChanged === true) {
-    writeFile(sendFormPath, genSendHtml(config))
+  if(fileExists(paths.forms.send) === false) {
+    writeFile(paths.forms.send, genSendHtml(config))
   }
 
 
@@ -254,4 +259,5 @@ function ini(paths, callback) {
 
 
 exports.ini = ini
-exports.writeConfig = writeConfigFile
+exports.writeConfigFile = writeConfigFile
+exports.writeConfigForm = writeConfigForm

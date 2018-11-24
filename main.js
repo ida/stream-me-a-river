@@ -2,14 +2,14 @@ const configurator = require('./backend/configurator')
 const River = require('./backend/river').River
 const Server = require('./server').Server
 
+
 const paths = {
   data: {
-    backend: 'backend/data/config.json',
-    frontend: 'frontend/data/config.json'
+    sources: 'backend/data/sources.json',
   },
   forms: {
-    config: 'frontend/templates/config.html',
-    send: 'frontend/templates/send.html'
+    send: 'frontend/templates/send.html',
+    sources: 'frontend/templates/sources.html'
   },
   secret: '.env'
 }

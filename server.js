@@ -22,8 +22,8 @@ app.get("/", (request, response) => {
 });
 
 
-app.get("/config", (request, response) => {
-  response.sendFile(templatesPath + 'config.html')
+app.get("/sources", (request, response) => {
+  response.sendFile(templatesPath + 'sources.html')
 });
 
 
@@ -58,35 +58,28 @@ app.post("/send", (request, response) => {
 });
 
 
-app.post("/config", (request, response) => {
-  let config = app.river.config
+app.post("/sources", (request, response) => {
+
+  let config = app.river.config       // create copy of config
   let selectedFields = request.body
 
-  // Write frontend-config:
-  files.write(config.paths.data.frontend, JSON.stringify(selectedFields))
-
-
-  // Update config-object:
-
-  for(let source in config.sources) { // deselect all fields
+  for(let source in config.sources) { // deselect all fields in copy
     let streamTypes = config.sources[source].streamTypes
     for(let fieldType in streamTypes) {
       streamTypes[fieldType].selected = false
     }
   }
 
-  for(let fieldName in selectedFields) { // select new userchoice
-    let fieldType = fieldName.split('.')
-    fieldType = fieldType[fieldType.length-1]
+  for(let fieldName in selectedFields) { // select new userchoice in copy
+    let fieldType = fieldName.split('.'); fieldType = fieldType[fieldType.length-1]
     let sourceName = fieldName.slice(0, fieldName.length-fieldType.length-1)
     config.sources[sourceName].streamTypes[fieldType].selected = true
   }
 
-  app.river.updateConfig(config)
+  app.river.updateConfig(config)  // set modified copy as new config
 
-
-  // Go to main-page:
   response.redirect('/')
+
 });
 
 

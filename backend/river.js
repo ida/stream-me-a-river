@@ -116,7 +116,8 @@ exports.River = class River {
     this.sources = []
     messages = []
     this.startSources()
-    configurator.writeConfig(config)
+    configurator.writeConfigFile(config)
+    configurator.writeConfigForm(config)
   }
 
 
