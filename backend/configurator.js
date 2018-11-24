@@ -109,7 +109,7 @@ function genConfigHtml(config) {
   </head>
   <body>
     <label>Select streams</label>
-    <form action="/config" method="post">
+    <form action="/sources" method="post">
 `
   for(let sourceName in sources) {
     html += genSourceHtml(sourceName, sources)
