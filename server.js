@@ -81,7 +81,7 @@ function listenPostRequests() {
     for(let source in config.sources) { // deselect all fields in copy
       let streamTypes = config.sources[source].streamTypes
       for(let fieldType in streamTypes) {
-        streamTypes[fieldType].selected = false
+        streamTypes[fieldType].checked = false
       }
     }
 
@@ -89,7 +89,7 @@ function listenPostRequests() {
       let fieldType = fieldName.split('.')
       fieldType = fieldType[fieldType.length-1]
       let sourceName = fieldName.slice(0, fieldName.length-fieldType.length-1)
-      config.sources[sourceName].streamTypes[fieldType].selected = true
+      config.sources[sourceName].streamTypes[fieldType].checked = true
     }
 
     app.river.updateConfig(config)  // set modified copy as new config
@@ -114,7 +114,7 @@ exports.Server = class Server {
     app.river = river
     main()
   }
-  serve(portNr=8080) {
+  serve(portNr=3000) {
     const listener = app.listen(portNr, (err) => {
       console.log('\nRiver flows to port', portNr)
     });

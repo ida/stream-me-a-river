@@ -19,7 +19,7 @@ exports.Source = class Source {
     let streamTypes = []
     for(let i in streamTypesObj) {
       let streamTypeObj = streamTypesObj[i]
-      if(streamTypeObj.selected === true) {
+      if(streamTypeObj.checked === true) {
         streamTypes.push(streamTypeObj.value)
       }
     }

@@ -1,44 +1,5 @@
-const filesystem = require('fs')
-
-
-function createDirectory(path) {
-  if(filesystem.existsSync(path) === false) {
-    filesystem.mkdirSync(path);
-  }
-}
-function createDirectories(paths) {
-  let path = ''
-  for(let i in paths) {
-    if(i != 0) path += '/'
-    path += paths[i]
-    createDirectory(path)
-  }
-}
-function createParents(filePath) {
-  let parentPath = filePath.split('/')
-  parentPath = parentPath.slice(0, parentPath.length-1)
-  createDirectories(parentPath)
-}
-function fileExists(filePath) {
-  return filesystem.existsSync(filePath)
-}
-function readFile(filePath) {
-  return filesystem.readFileSync(filePath, 'utf-8')
-}
-function readObjectOfFile(filePath) {
-  let content = filesystem.readFileSync(filePath, 'utf-8')
-  let object = JSON.parse(content)
-  return object
-}
-function writeFile(filePath, string) {
-  createParents(filePath)
-  filesystem.writeFileSync(filePath, string)
-  console.log('Wrote', filePath)
-}
-function writeObjectToFile(filePath, object) {
-  writeFile(JSON.stringify(object))
-}
-
+const filesystem = require('./helpers/filesystem')
+const Doc = require('./templata/doc').Doc
 
 
 
@@ -55,19 +16,19 @@ function compareSources(config, credentials) {
       "home": {
         "value": "user",
         "title": "Home",
-        "selected": false
+        "checked": false
       },
 
       "local": {
         "value": "public/local",
         "title": "Local",
-        "selected": true
+        "checked": true
       },
 
       "global": {
         "value": "public",
         "title": "Global",
-        "selected": false
+        "checked": false
       }
     }
   }
@@ -95,97 +56,6 @@ function compareSources(config, credentials) {
 }
 
 
-function genConfigHtml(config) {
-  let sources = config.sources
-  let html = `<html lang="en-gb">
-  <head>
-    <title>River config</title>
-    <meta name="description"
-          content="Congigure the streams of several mastodon-accounts.">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../styles/style.css">
-  </head>
-  <body>
-    <label>Select streams</label>
-    <form action="/sources" method="post">
-`
-  for(let sourceName in sources) {
-    html += genSourceHtml(sourceName, sources)
-  }
-  html += `      <input type="submit" value="Save">
-    </form>
-  </body>
-</html>`
-  return html
-}
-
-
-function genSourceHtml(sourceName, sources) {
-  let source = sources[sourceName]
-  let streamTypes = source.streamTypes
-  let html = `      <fieldset>
-        <label>${sourceName}</label>`; for(let streamTypeName in streamTypes) {
-        let streamTypeObj = streamTypes[streamTypeName]; html += `
-        <div class="field">
-          <input name="${sourceName}.${streamTypeName}"
-                 type="checkbox"
-                 value="${streamTypeObj.value}"`
-                 if(streamTypeObj.selected === true) { html += `
-                 checked` } html +=
-                 `>
-          ${streamTypeObj.title}
-        </div>`} html += `
-      </fieldset>
-`
-  return html
-}
-
-
-function genSendHtml(config) {
-let html = `
-<html lang="en-gb">
-  <head>
-    <title>Send message</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../styles/style.css">
-  </head>
-  <body>
-    <form action="/send" method="post">
-      <label>
-        Write a message
-      </label>
-      <br>
-        <textarea name="message">Test message</textarea>
-      <br>
-`
-
-  for(let sourceName in config.sources) {
-html += `<div class="field">
-<input name="${sourceName}"
-       type="checkbox"
-       value="${sourceName}"
-       checked>
-  ${sourceName}
-</div>
-`
-
-  }
-
-html += `
-
-
-      <input type="submit" value="Send">
-    </form>
-  </body>
-</html>
-`
-  return html
-}
-
 
 function getCredentialsOfSecretFile(secretFilePath) {
 //
@@ -198,7 +68,7 @@ function getCredentialsOfSecretFile(secretFilePath) {
 //      "another.source": "anotherToken"
 //    }'
 //
-  let string = readFile(secretFilePath)
+  let string = filesystem.readFile(secretFilePath)
 	string = string.trim()
 	string = string.slice(7, string.length-1)
   return JSON.parse(string)
@@ -206,12 +76,75 @@ function getCredentialsOfSecretFile(secretFilePath) {
 
 
 function writeConfigFile(config) {
-  writeFile(config.paths.data.sources, JSON.stringify(config))
+  filesystem.writeFile(config.paths.data.sources, JSON.stringify(config))
 }
 
+
 function writeConfigForm(config) {
-  let html = genConfigHtml(config)
-  writeFile(config.paths.forms.sources, html)
+
+  // Create document:
+  let doc = new Doc(config.paths.forms.sources)
+
+  // Add form to body:
+  let form = doc.body.addTag('form', {action: '/sources', method:'post'})
+
+
+  // Add fieldsets to form:
+  for(let sourceName in config.sources) {
+
+    let fields = config.sources[sourceName].streamTypes
+
+    let fieldset = form.addTag('fieldset')
+
+    fieldset.addTag('label', {}, sourceName)
+
+
+    // Add fields to fieldset:
+    for(let fieldName in fields) {
+
+      let attr = fields[fieldName]
+
+      attr.name = sourceName + '.' + fieldName
+
+      let content = fieldName[0].toUpperCase() + fieldName.slice(1)
+
+      fieldset.addField('multiselect', attr, content)
+    }
+  }
+
+  // Add confirm-button:
+  form.addTag('input', { type: 'submit', value: 'Send'})
+
+
+  doc.writeRenderedHtml()
+
+}
+
+
+function writeSendForm(config) {
+
+  // Create document:
+  let doc = new Doc(config.paths.forms.send)
+
+  // Add form to body:
+  let form = doc.body.addTag('form', {action: '/send', method:'post'})
+
+  form.addTag( 'label', {}, 'Write a message' )
+  form.addField( 'textlines', { name: 'message' } )
+
+  let fieldset = form.addTag('fieldset')
+  fieldset.addTag('label', {}, 'Choose recipients')
+
+  for(let sourceName in config.sources) {
+
+    fieldset.addField('multiselect', { name: sourceName }, sourceName)
+
+  }
+
+  // Add confirm-button:
+  form.addTag('input', { type: 'submit', value: 'Send'})
+
+  doc.writeRenderedHtml()
 }
 
 
@@ -228,8 +161,8 @@ function ini(paths, callback) {
 
 
   // Read and set config of config-file for the case config-file exists:
-  if(fileExists(paths.data.sources)) {
-    config=readObjectOfFile(paths.data.sources)
+  if(filesystem.fileExists(paths.data.sources)) {
+    config = filesystem.readObjectOfFile(paths.data.sources)
   }
 
 
@@ -237,19 +170,19 @@ function ini(paths, callback) {
   config, configChanged = compareSources(config, credentials)
 
   // Write config-form for browser-user-input, if necessary:
-  if(fileExists(paths.forms.config) === false || configChanged === true) {
+  if(filesystem.fileExists(paths.forms.config) === false || configChanged === true) {
     writeConfigForm(config)
   }
 
 
   // Write config-file for permanent storage, if necessary:
-  if(fileExists(paths.data.sources) === false || configChanged === true) {
+  if(filesystem.fileExists(paths.data.sources) === false || configChanged === true) {
     writeConfigFile(config)
   }
 
 
-  if(fileExists(paths.forms.send) === false) {
-    writeFile(paths.forms.send, genSendHtml(config))
+  if(filesystem.fileExists(paths.forms.send) === false) {
+    writeSendForm(config)
   }
 
 
