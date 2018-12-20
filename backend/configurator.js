@@ -1,5 +1,5 @@
 const filesystem = require('./helpers/filesystem')
-const Doc = require('./templata/doc').Doc
+const Doc = require('templati').Doc
 
 
 
@@ -116,7 +116,7 @@ function writeConfigForm(config) {
   form.addTag('input', { type: 'submit', value: 'Send'})
 
 
-  doc.writeRenderedHtml()
+  doc.writeDoc()
 
 }
 
