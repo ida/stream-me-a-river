@@ -144,7 +144,7 @@ function writeSendForm(config) {
   // Add confirm-button:
   form.addTag('input', { type: 'submit', value: 'Send'})
 
-  doc.writeRenderedHtml()
+  doc.writeDoc()
 }
 
 

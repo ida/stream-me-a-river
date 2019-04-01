@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en-gb">
+  <head>
+    <title>
+      Send
+    </title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <form action="/send" method="post">
+      <label>
+        Write a message
+      </label>
+      <div class="field">
+        <textarea name="message">
+        </textarea>
+      </div>
+      <fieldset>
+        <label>
+          Choose recipients
+        </label>
+        <div class="field">
+          <input type="checkbox" name="social.nasqueron.org">
+            social.nasqueron.org
+        </div>
+        <div class="field">
+          <input type="checkbox" name="social.tchncs.de">
+            social.tchncs.de
+        </div>
+      </fieldset>
+      <input type="submit" value="Send">
+    </form>
+  </body>
+</html>
